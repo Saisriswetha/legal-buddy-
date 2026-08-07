@@ -15,8 +15,38 @@ export const Login = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
     const code = urlParams.get('code')
+    const authenticated = urlParams.get('authenticated')
+
     if (code) {
-      window.history.replaceState({}, document.title, window.location.pathname)
+      setIsLoading(true)
+      authService
+        .loginWithGoogle(code)
+        .then((authToken) => {
+          if (authToken.user) {
+            authService.setStoredUser(authToken.user)
+          }
+          window.history.replaceState({}, document.title, window.location.pathname)
+          window.location.href = '/chat'
+        })
+        .catch((error) => {
+          console.error('Login failed:', error)
+          setIsLoading(false)
+          window.history.replaceState({}, document.title, window.location.pathname)
+        })
+    } else if (authenticated === 'true') {
+      setIsLoading(true)
+      authService
+        .getCurrentUser()
+        .then((user) => {
+          if (user) {
+            authService.setStoredUser(user)
+          }
+          window.location.href = '/chat'
+        })
+        .catch(() => {
+          setIsLoading(false)
+          window.history.replaceState({}, document.title, window.location.pathname)
+        })
     }
   }, [])
 

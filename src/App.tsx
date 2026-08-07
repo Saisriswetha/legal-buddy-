@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { ProtectedRoute } from './components/Auth/ProtectedRoute'
 import { Login } from './pages/Login'
@@ -13,8 +13,8 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search)
     const authenticated = urlParams.get('authenticated')
 
-    const storedUser = authService.getStoredUser()
-
+    const storedUser 
+= authService.getStoredUser()
     // If authenticated parameter exists, fetch current user from backend
     if (authenticated === 'true' && !storedUser) {
       authService
@@ -52,7 +52,7 @@ function App() {
   }
 
   return (
-    <HashRouter basename={import.meta.env.BASE_URL}>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
@@ -73,7 +73,7 @@ function App() {
           }
         />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 

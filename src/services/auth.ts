@@ -6,6 +6,17 @@ const authAPI = axios.create({
   withCredentials: true,
 })
 
+authAPI.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('access_token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => Promise.reject(error)
+)
+
 export const authService = {
   async loginWithGoogle(code: string): Promise<AuthToken> {
     try {
