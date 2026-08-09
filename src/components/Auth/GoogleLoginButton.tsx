@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authService } from '../../services/auth'
 import { LoadingSpinner } from '../Common/LoadingSpinner'
+import { API_URL } from "../../services/constants";
 
 export const GoogleLoginButton = () => {
   const navigate = useNavigate()
@@ -54,7 +55,7 @@ export const GoogleLoginButton = () => {
   }, [navigate])
 
   const handleLogin = () => {
-    window.location.href = 'http://localhost:8000/api/auth/google'
+    window.location.href = '${API_URL}/api/auth/google'
   }
 
   if (loading) {
