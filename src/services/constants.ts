@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
     LOGOUT: `${API_URL}/api/auth/logout`,
   },
   CHAT: {
-    SEND: `${API_URL}/api/chat/`,
+    SEND: `/api/chat/`,
     HISTORY: `${API_URL}/api/conversations`,
     SESSIONS: `${API_URL}/api/sessions`,
   },
