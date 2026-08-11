@@ -3,7 +3,7 @@ import { API_ENDPOINTS } from './constants'
 import { ChatResponse, Conversation, Session, GraphData, UploadResponse, LawyerInfo } from '../types'
 
 const apiClient: AxiosInstance = axios.create({
-  withCredentials: false,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
