@@ -1,6 +1,13 @@
 import axios, { AxiosInstance } from 'axios'
 import { API_ENDPOINTS } from './constants'
-import { ChatResponse, Conversation, Session, GraphData, UploadResponse, LawyerInfo } from '../types'
+import {
+  ChatResponse,
+  Conversation,
+  Session,
+  GraphData,
+  UploadResponse,
+  LawyerInfo,
+} from '../types'
 
 const apiClient: AxiosInstance = axios.create({
   withCredentials: true,
@@ -9,25 +16,14 @@ const apiClient: AxiosInstance = axios.create({
   },
 })
 
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('access_token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  (error) => Promise.reject(error)
-)
-
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('user')
-      localStorage.removeItem('access_token')
       window.location.href = '/login'
     }
+
     return Promise.reject(error)
   }
 )
@@ -57,11 +53,16 @@ export const apiService = {
     const formData = new FormData()
     formData.append('file', file)
 
-    const response = await apiClient.post(API_ENDPOINTS.UPLOAD.FILE, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
+    const response = await apiClient.post(
+      API_ENDPOINTS.UPLOAD.FILE,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    )
+
     return response.data
   },
 
@@ -71,14 +72,26 @@ export const apiService = {
     return response.data
   },
 
-  async searchGraph(entity: string): Promise<Record<string, unknown>> {
-    const response = await apiClient.post(API_ENDPOINTS.GRAPH.SEARCH, { entity })
+  async searchGraph(
+    entity: string
+  ): Promise<Record<string, unknown>> {
+    const response = await apiClient.post(
+      API_ENDPOINTS.GRAPH.SEARCH,
+      { entity }
+    )
     return response.data
   },
 
   // Lawyer endpoints
-  async findLawyers(location: string): Promise<{ lawyers: LawyerInfo[]; legal_aid: LawyerInfo[] }> {
-    const response = await apiClient.get(API_ENDPOINTS.LAWYERS.FIND(location))
+  async findLawyers(
+    location: string
+  ): Promise<{
+    lawyers: LawyerInfo[]
+    legal_aid: LawyerInfo[]
+  }> {
+    const response = await apiClient.get(
+      API_ENDPOINTS.LAWYERS.FIND(location)
+    )
     return response.data
   },
 }
